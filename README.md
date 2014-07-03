@@ -12,6 +12,15 @@ anyone, anywhere in the world. DRACHMacoin uses peer-to-peer technology to opera
 with no central authority: managing transactions and issuing money are carried
 out collectively by the network.
 
+Why did I make this coin?
+------------------
+Because I can, and it is fun.
+
+Whats cool about this coin?
+------------------
+It's a multi algo coin of 7 different algo's. It re-targets using DarkGravity. That's kind of cool.  It supports x11, x13, and x15.
+Well... That's, ummm about it.
+
 Specifications
 ------------------
 
