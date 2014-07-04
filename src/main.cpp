@@ -1280,11 +1280,11 @@ int static generateMTRandom(unsigned int s, int range)
     return dist(gen);
 }
 
-static const int64 nStartSubsidy = 650 * COIN;
-static const int64 nMinSubsidy =   650 * COIN;
+static const int64 nStartSubsidy = 43 * COIN;
+static const int64 nMinSubsidy =   43 * COIN;
 
-static const int64 nStartSubsidyNEW = 1650 * COIN;
-static const int64 nMinSubsidyNEW = 650 * COIN;
+static const int64 nStartSubsidyNEW = 430 * COIN;
+static const int64 nMinSubsidyNEW = 43 * COIN;
 
 int64 static GetBlockValue(int nHeight, int64 nFees, uint256 prevHash)
 {
