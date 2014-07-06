@@ -1,6 +1,7 @@
 
-Currently BROKEN (Fixing in a FORK w/o DarkGravity) TBA...
-==========================================================
+Much like the Mt. Gox Guy .... I'm Sorry. It's now fixed, however you MUST remine.
+Changing from DarkNess into Light there was no way but to reset everything including the DIFF.
+===================================
 
 DRACHMacoin (DRAC)
 ===================================
