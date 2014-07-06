@@ -92,7 +92,7 @@ static inline void xor_salsa8_sse2(__m128i B[4], const __m128i Bx[4])
 	B[3] = _mm_add_epi32(B[3], X3);
 }
 
-void scrypt_1024_1_1_256_sp_sse2(const char *input, char *output, char *scratchpad)
+void scrypt_1024_1_1_256_sp_sse2(const char *input, int input_len, char *output, char *scratchpad)
 {
 	uint8_t B[128];
 	union {
@@ -104,7 +104,7 @@ void scrypt_1024_1_1_256_sp_sse2(const char *input, char *output, char *scratchp
 
 	V = (__m128i *)(((uintptr_t)(scratchpad) + 63) & ~ (uintptr_t)(63));
 
-	PBKDF2_SHA256((const uint8_t *)input, 80, (const uint8_t *)input, 80, 1, B, 128);
+	PBKDF2_SHA256((const uint8_t *)input, input_len, (const uint8_t *)input, input_len, 1, B, 128);
 
 	for (k = 0; k < 2; k++) {
 		for (i = 0; i < 16; i++) {
@@ -132,5 +132,5 @@ void scrypt_1024_1_1_256_sp_sse2(const char *input, char *output, char *scratchp
 		}
 	}
 
-	PBKDF2_SHA256((const uint8_t *)input, 80, B, 128, 1, (uint8_t *)output, 32);
+	PBKDF2_SHA256((const uint8_t *)input, input_len, B, 128, 1, (uint8_t *)output, 32);
 }

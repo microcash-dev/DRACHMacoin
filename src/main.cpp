@@ -743,7 +743,7 @@ bool CheckTransaction(const CTransaction& tx, CValidationState &state)
 
     if (tx.IsCoinBase())
     {
-        if (tx.vin[0].scriptSig.size() < 2 || tx.vin[0].scriptSig.size() > 100)
+        if (tx.vin[0].scriptSig.size() < 2 || tx.vin[0].scriptSig.size() > 110)
             return state.DoS(100, error("CheckTransaction() : coinbase script size"));
     }
     else
@@ -1278,11 +1278,11 @@ int static generateMTRandom(unsigned int s, int range)
     return dist(gen);
 }
 
-static const int64 nStartSubsidy = 650 * COIN;
-static const int64 nMinSubsidy =   650 * COIN;
+static const int64 nStartSubsidy = 49 * COIN;
+static const int64 nMinSubsidy =   49 * COIN;
 
-static const int64 nStartSubsidyNEW = 1650 * COIN;
-static const int64 nMinSubsidyNEW = 650 * COIN;
+static const int64 nStartSubsidyNEW = 49 * COIN;
+static const int64 nMinSubsidyNEW = 49 * COIN;
 
 int64 static GetBlockValue(int nHeight, int64 nFees, uint256 prevHash)
 {

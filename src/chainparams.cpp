@@ -43,45 +43,29 @@ public:
         // Build the genesis block. Note that the output of the genesis coinbase cannot
         // be spent as it did not originally exist in the database.
   
-        const char* pszTimestamp = "2014-07-01 EST - An ancient Greek currency unit used during a period of ten centuries.";
+        const char* pszTimestamp = "2014-07-06 EST - Dev's Asheet MeDraws and Akeep Faating 1c7a96e8-3781-431b-905f-963347be0612.";
         CTransaction txNew;
         txNew.vin.resize(1);
         txNew.vout.resize(1);
         txNew.vin[0].scriptSig = CScript() << 486604799 << CBigNum(4) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
-        txNew.vout[0].nValue = 65 * COIN;
+        txNew.vout[0].nValue = 49 * COIN;
         txNew.vout[0].scriptPubKey = CScript() << ParseHex("04e941763c7750969e751bee1ffbe96a651a0feb131db046546c219ea40bff40b95077dc9ba1c05af991588772d8daabbda57386c068fb9bc7477c5e28702d5eb9") << OP_CHECKSIG;
         genesis.vtx.push_back(txNew);
         genesis.hashPrevBlock = 0;
         genesis.hashMerkleRoot = genesis.BuildMerkleTree();
         genesis.nVersion = BLOCK_VERSION_DEFAULT;
-        genesis.nTime    = 1404350340;
+        genesis.nTime    = 1404643635;
         genesis.nBits    = 0x1e0fffff;
-        genesis.nNonce   = 4986355;
+        genesis.nNonce   = 126771141;
         
         //// debug print let there be light
 	/*
-MAIN: 00000f6d06fd7b77751899a8e6ce95b8977545c8304fdf1c42e53a40809aec0d
-7c30cc28468aa112a905d7fdef6267ffbb2c9d30b2a37a96aac99e0c65c60875
-1e0fffff
-CBlock(hash=00000f6d06fd7b77751899a8e6ce95b8977545c8304fdf1c42e53a40809aec0d, ver=2, pow_algo=0, pow_hash=00000f6d06fd7b77751899a8e6ce95b8977545c8304fdf1c42e53a40809aec0d, hashPrevBlock=0000000000000000000000000000000000000000000000000000000000000000, hashMerkleRoot=7c30cc28468aa112a905d7fdef6267ffbb2c9d30b2a37a96aac99e0c65c60875, nTime=1404350340, nBits=1e0fffff, nNonce=4986355, vtx=1)
-  CTransaction(hash=7c30cc2846, ver=1, vin.size=1, vout.size=1, nLockTime=0)
-    CTxIn(COutPoint(0000000000, 4294967295), coinbase 04ffff001d01044c56323031342d30372d303120455354202d20416e20616e6369656e7420477265656b2063757272656e637920756e6974207573656420647572696e67206120706572696f64206f662074656e2063656e7475726965732e)
-    CTxOut(nValue=65.00000000, scriptPubKey=04e941763c7750969e751bee1ffbe9)
-  vMerkleTree: 7c30cc28468aa112a905d7fdef6267ffbb2c9d30b2a37a96aac99e0c65c60875
-MAIN: 00000a992991db542397d47d2fc1ecf7f5da3ecca4ac3f25f70f77f39cb9eb45
-7c30cc28468aa112a905d7fdef6267ffbb2c9d30b2a37a96aac99e0c65c60875
-1e0fffff
-CBlock(hash=00000a992991db542397d47d2fc1ecf7f5da3ecca4ac3f25f70f77f39cb9eb45, ver=2, pow_algo=0, pow_hash=00000a992991db542397d47d2fc1ecf7f5da3ecca4ac3f25f70f77f39cb9eb45, hashPrevBlock=0000000000000000000000000000000000000000000000000000000000000000, hashMerkleRoot=7c30cc28468aa112a905d7fdef6267ffbb2c9d30b2a37a96aac99e0c65c60875, nTime=1404643635, nBits=1e0fffff, nNonce=5784240, vtx=1)
-  CTransaction(hash=7c30cc2846, ver=1, vin.size=1, vout.size=1, nLockTime=0)
-    CTxIn(COutPoint(0000000000, 4294967295), coinbase 04ffff001d01044c56323031342d30372d303120455354202d20416e20616e6369656e7420477265656b2063757272656e637920756e6974207573656420647572696e67206120706572696f64206f662074656e2063656e7475726965732e)
-    CTxOut(nValue=65.00000000, scriptPubKey=04e941763c7750969e751bee1ffbe9)
-  vMerkleTree: 7c30cc28468aa112a905d7fdef6267ffbb2c9d30b2a37a96aac99e0c65c60875
+
 
 	*/
         hashGenesisBlock = genesis.GetHash();
 	//uncomment these 4 lines to generate the Genesis Block	
 	
-	/*	
         while (hashGenesisBlock > bnProofOfWorkLimit[ALGO_SCRYPT].getuint256()){
             if (++genesis.nNonce==0) break;
             hashGenesisBlock = genesis.GetHash();
@@ -91,11 +75,11 @@ CBlock(hash=00000a992991db542397d47d2fc1ecf7f5da3ecca4ac3f25f70f77f39cb9eb45, ve
         printf("%s\n", genesis.hashMerkleRoot.ToString().c_str());
         printf("%x\n", bnProofOfWorkLimit[ALGO_SHA256D].GetCompact());
         genesis.print();
-	*/
+
 	
        
-        assert(hashGenesisBlock == uint256("0x00000f6d06fd7b77751899a8e6ce95b8977545c8304fdf1c42e53a40809aec0d"));
-        assert(genesis.hashMerkleRoot == uint256("0x7c30cc28468aa112a905d7fdef6267ffbb2c9d30b2a37a96aac99e0c65c60875"));
+        assert(hashGenesisBlock == uint256("0x00000a12e3fcbe84511a5bad444c63cadeef1cf40b045d09d7f1c41dfb1de3f5"));
+        assert(genesis.hashMerkleRoot == uint256("0x2685d3e21276dc0f3ddafb5995bd9c63b9454dd77ad471eb819b4adb06c141da"));
 
         vSeeds.push_back(CDNSSeedData("drachmacoin.com", "drachmacoin.com"));
         vSeeds.push_back(CDNSSeedData("192.168.1.6", "192.168.1.6"));
