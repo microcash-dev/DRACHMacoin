@@ -25,7 +25,7 @@ Specifications
 - Difficulty is retargeted every block.
 - 90 second block target per algorithm (30 second average across 7 algorithms).
 - 65.5 million total coins
-- 43+ coins per block. 
+- 49+ coins per block. 
 - Random superblock with reward.
 - Up front super mining rewards.
 - DarkGravityWave
