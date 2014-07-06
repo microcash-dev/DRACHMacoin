@@ -1,3 +1,6 @@
+
+Currently BROKEN (Fixing in a FORK w/o DarkGravity) TBA...
+
 DRACHMacoin (DRAC)
 ===================================
 
