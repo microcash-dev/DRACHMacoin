@@ -28,7 +28,7 @@ Specifications
 - 49+ coins per block. 
 - Random superblock with reward.
 - Up front super mining rewards.
-- DarkGravityWave
+- -D-A-R-K-G-r-a-v-i-t-y- stricken
 
 License
 -------
