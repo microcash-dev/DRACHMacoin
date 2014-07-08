@@ -1,3 +1,6 @@
+Working on a new COOL Wallet Design. Working for Linux Now...
+===================================
+
 DRACHMacoin (DRAC)
 ===================================
 
