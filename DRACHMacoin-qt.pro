@@ -339,7 +339,9 @@ SOURCES += src/qt/bitcoin.cpp \
 RESOURCES += src/qt/bitcoin.qrc
 
 FORMS += src/qt/forms/sendcoinsdialog.ui \
-    src/qt/forms/addressbookpage.ui \
+
+    src/qt/forms/addressbookpage.ui \    
+    src/qt/forms/coincontroldialog.ui \
     src/qt/forms/signverifymessagedialog.ui \
     src/qt/forms/aboutdialog.ui \
     src/qt/forms/editaddressdialog.ui \
