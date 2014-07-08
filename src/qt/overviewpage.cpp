@@ -9,9 +9,11 @@
 #include "transactionfilterproxy.h"
 #include "guiutil.h"
 #include "guiconstants.h"
+#include "init.h"
 
 #include <QAbstractItemDelegate>
 #include <QPainter>
+#include <QTimer>
 
 #define DECORATION_SIZE 64
 #define NUM_ITEMS 3
@@ -115,6 +117,11 @@ OverviewPage::OverviewPage(QWidget *parent) :
     // init "out of sync" warning labels
     ui->labelWalletStatus->setText("(" + tr("out of sync") + ")");
     ui->labelTransactionsStatus->setText("(" + tr("out of sync") + ")");
+    ui->BtnMine->setStyleSheet("background-color: rgb(0, 80, 0); color: rgb(255, 255, 255)");
+    bgrIconMovie = new QMovie(":/movies/bgtony", "mng", this);
+
+    timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(TimerEvent()));
 
     // start with displaying the "out of sync" warnings
     showOutOfSyncWarning(true);
@@ -140,7 +147,6 @@ void OverviewPage::setBalance(qint64 balance, qint64 unconfirmedBalance, qint64 
     ui->labelBalance->setText(BitcoinUnits::formatWithUnit(unit, balance));
     ui->labelUnconfirmed->setText(BitcoinUnits::formatWithUnit(unit, unconfirmedBalance));
     ui->labelImmature->setText(BitcoinUnits::formatWithUnit(unit, immatureBalance));
-    ui->labelTotal->setText(BitcoinUnits::formatWithUnit(unit, balance + unconfirmedBalance + immatureBalance));
 
     // only show immature (newly mined) balance if it's non-zero, so as not to complicate things
     // for the non-mining users
@@ -211,4 +217,48 @@ void OverviewPage::showOutOfSyncWarning(bool fShow)
 {
     ui->labelWalletStatus->setVisible(fShow);
     ui->labelTransactionsStatus->setVisible(fShow);
+}
+
+//void OverviewPage::on_BtnMine_toggled(bool checked)
+//{
+    //QMessageBox msgBox;
+    //msgBox.setText("Hello.");
+    //msgBox.exec();
+//}
+
+bool isMining = false;
+void OverviewPage::on_BtnMine_clicked()
+{
+
+    if(isMining)
+    {
+        if (pwalletMain)
+        {
+            isMining = false;
+            ui->BtnMine->setText("Click to Start Mining");
+            ui->BtnMine->setStyleSheet("background-color: rgb(0, 80, 0); color: rgb(255, 255, 255)");
+            GenerateBitcoins(false, pwalletMain);
+            timer->stop();
+        }
+
+    }
+    else
+    {
+        if (pwalletMain)
+        {
+            isMining = true;
+            ui->BtnMine->setText("Click to Stop Mining");
+            ui->BtnMine->setStyleSheet("background-color: rgb(200, 0, 0); color: rgb(255, 255, 255)");
+            GenerateBitcoins(true, pwalletMain);
+            timer->start(425);
+        }
+
+    }
+
+}
+
+void OverviewPage::TimerEvent()
+{
+    ui->bgtonyframe->setMovie(bgrIconMovie);
+    bgrIconMovie->jumpToNextFrame();
 }

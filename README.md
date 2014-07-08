@@ -1,8 +1,3 @@
-
-Much like the Mt. Gox Guy .... I'm Sorry. It's now fixed, however you MUST remine.
-Changing from DarkNess into Light there was no way but to reset everything including the DIFF.
-===================================
-
 DRACHMacoin (DRAC)
 ===================================
 
@@ -17,18 +12,17 @@ anyone, anywhere in the world. DRACHMacoin uses peer-to-peer technology to opera
 with no central authority: managing transactions and issuing money are carried
 out collectively by the network.
 
-
-Specifications 
+Specifications
 ------------------
 
 - Proof of Work based. Mine using any of the 7 algorithms : sha256d(default), scrypt all the way through x11, x13, and x15.
 - Difficulty is retargeted every block.
 - 90 second block target per algorithm (30 second average across 7 algorithms).
 - 65.5 million total coins
-- 49+ coins per block. 
+- 650+ coins per block. 
 - Random superblock with reward.
 - Up front super mining rewards.
-- -D-A-R-K-G-r-a-v-i-t-y- stricken
+- DarkGravityWave
 
 License
 -------

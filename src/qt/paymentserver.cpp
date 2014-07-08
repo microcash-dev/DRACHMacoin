@@ -18,6 +18,7 @@
 #include <QLocalServer>
 #include <QLocalSocket>
 #include <QStringList>
+#include <QDesktopServices>
 #if QT_VERSION < 0x050000
 #include <QUrl>
 #endif
@@ -34,7 +35,7 @@ const QString BITCOIN_IPC_PREFIX("drachmacoin:");
 //
 static QString ipcServerName()
 {
-    QString name("DRACHMacoinQt");
+    QString name("BitcoinQt");
 
     // Append a simple hash of the datadir
     // Note that GetDataDir(true) returns a different path
@@ -109,6 +110,13 @@ PaymentServer::PaymentServer(QApplication* parent) : QObject(parent), saveURIs(t
         qDebug() << tr("Cannot start drachmacoin: click-to-pay handler");
     else
         connect(uriServer, SIGNAL(newConnection()), this, SLOT(handleURIConnection()));
+
+    QDesktopServices::setUrlHandler("drachmacoin", this, SLOT(handleDRACHMacoinURI));
+}
+
+void PaymentServer::handleDRACHMacoinURI(const QUrl &url)
+{
+    emit receivedURI(url.toString());
 }
 
 bool PaymentServer::eventFilter(QObject *object, QEvent *event)
@@ -119,10 +127,15 @@ bool PaymentServer::eventFilter(QObject *object, QEvent *event)
         QFileOpenEvent* fileEvent = static_cast<QFileOpenEvent*>(event);
         if (!fileEvent->url().isEmpty())
         {
+            // WTF Qt?
+            QString url = fileEvent->url().toString();
+            url.replace("file:drachmacoin", "drachmacoin");
+            url.replace(":/D", ":D");
+
             if (saveURIs) // Before main window is ready:
-                savedPaymentRequests.append(fileEvent->url().toString());
+                savedPaymentRequests.append(url);
             else
-                emit receivedURI(fileEvent->url().toString());
+                emit receivedURI(url);
             return true;
         }
     }

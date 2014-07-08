@@ -5,7 +5,6 @@
 #include "addresstablemodel.h"
 #include "transactiontablemodel.h"
 
-#include "chainparams.h"
 #include "alert.h"
 #include "main.h"
 #include "checkpoints.h"
@@ -56,9 +55,9 @@ QDateTime ClientModel::getLastBlockDate() const
     if (pindexBest)
         return QDateTime::fromTime_t(pindexBest->GetBlockTime());
     else if(!isTestNet())
-        return QDateTime::fromTime_t(1402434000); // Genesis block's time
+        return QDateTime::fromTime_t(1231006505); // Genesis block's time
     else
-        return QDateTime::fromTime_t(1402434000); // Genesis block's time (testnet)
+        return QDateTime::fromTime_t(1296688602); // Genesis block's time (testnet)
 }
 
 double ClientModel::getVerificationProgress() const
@@ -111,7 +110,7 @@ void ClientModel::updateAlert(const QString &hash, int status)
 
 bool ClientModel::isTestNet() const
 {
-    return TestNet();
+    return TestNet;
 }
 
 bool ClientModel::inInitialBlockDownload() const

@@ -3,7 +3,7 @@
 
 //
 // This class handles payment requests from clicking on
-// drachmacoin: URIs
+// bitcoin: URIs
 //
 // This is somewhat tricky, because we have to deal with
 // the situation where the user clicks on a link during
@@ -33,6 +33,7 @@
 
 class QApplication;
 class QLocalServer;
+class QUrl;
 
 class PaymentServer : public QObject
 {
@@ -59,6 +60,7 @@ public slots:
     // Signal this when the main window's UI is ready
     // to display payment requests to the user
     void uiReady();
+    void handleDRACHMacoinURI(const QUrl& url);
 
 private slots:
     void handleURIConnection();

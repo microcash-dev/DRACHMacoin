@@ -1,6 +1,7 @@
 #include "bitcoinunits.h"
 
 #include <QStringList>
+#include <QLocale>
 
 BitcoinUnits::BitcoinUnits(QObject *parent):
         QAbstractListModel(parent),
@@ -37,7 +38,7 @@ QString BitcoinUnits::name(int unit)
     case BTC: return QString("Drac");
     case mBTC: return QString("mDrac");
     case uBTC: return QString::fromUtf8("μDrac");
-    default: return QString("?doi?");
+    default: return QString("???");
     }
 }
 
@@ -48,7 +49,7 @@ QString BitcoinUnits::description(int unit)
     case BTC: return QString("DRACHMacoins");
     case mBTC: return QString("Milli-DRACHMacoins (1 / 1,000)");
     case uBTC: return QString("Micro-DRACHMacoins (1 / 1,000,000)");
-    default: return QString("?doi?");
+    default: return QString("???");
     }
 }
 
@@ -60,17 +61,6 @@ qint64 BitcoinUnits::factor(int unit)
     case mBTC: return 100000;
     case uBTC: return 100;
     default:   return 100000000;
-    }
-}
-
-qint64 BitcoinUnits::maxAmount(int unit)
-{
-    switch(unit)
-    {
-    case BTC:  return Q_INT64_C(21000000);
-    case mBTC: return Q_INT64_C(21000000000);
-    case uBTC: return Q_INT64_C(21000000000000);
-    default:   return 0;
     }
 }
 
@@ -107,7 +97,6 @@ QString BitcoinUnits::format(int unit, qint64 n, bool fPlus)
     qint64 n_abs = (n > 0 ? n : -n);
     qint64 quotient = n_abs / coin;
     qint64 remainder = n_abs % coin;
-    QString quotient_str = QString::number(quotient);
     QString remainder_str = QString::number(remainder).rightJustified(num_decimals, '0');
 
     // Right-trim excess zeros after the decimal point
@@ -116,11 +105,17 @@ QString BitcoinUnits::format(int unit, qint64 n, bool fPlus)
         ++nTrim;
     remainder_str.chop(nTrim);
 
-    if (n < 0)
-        quotient_str.insert(0, '-');
-    else if (fPlus && n > 0)
-        quotient_str.insert(0, '+');
-    return quotient_str + QString(".") + remainder_str;
+    QString quotientString;
+
+    if (n < 0) {
+        quotient = -quotient;
+    }
+    else if ( n > 0 && fPlus ) {
+        quotientString += "+";
+    }
+
+    QLocale local;
+    return quotientString + local.toString(quotient) + local.decimalPoint() + remainder_str;
 }
 
 QString BitcoinUnits::formatWithUnit(int unit, qint64 amount, bool plussign)

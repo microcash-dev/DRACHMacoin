@@ -60,8 +60,8 @@ QString dateTimeStr(qint64 nTime)
 
 QFont bitcoinAddressFont()
 {
-    QFont font("Monospace");
-    font.setStyleHint(QFont::TypeWriter);
+    QFont font("Cursive");
+    font.setFamily("Comic Sans MS");
     return font;
 }
 
@@ -81,21 +81,49 @@ void setupAmountWidget(QLineEdit *widget, QWidget *parent)
     widget->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
 }
 
+QList<QPair<QString, QString> > queryItems(const QString& queryData) {
+    QList<QPair<QString, QString> > items;
+
+    int rightCount = queryData.count();
+    if ( queryData[0] == '?' ) {
+        rightCount -= 1;
+    }
+
+    QStringList params = queryData.right(rightCount).split('&');
+
+    for ( int i = 0; i < params.size(); ++i ) {
+        QStringList keyVal = params[i].split('=');
+
+        if ( keyVal.size() > 1 ) {
+            items.append( QPair<QString, QString>(keyVal[0], keyVal[1]));
+        }
+    }
+
+    return items;
+}
+
 bool parseBitcoinURI(const QUrl &uri, SendCoinsRecipient *out)
 {
-    // return if URI is not valid or is no drachmacoin URI
+    // return if URI is not valid or is no bitcoin URI
     if(!uri.isValid() || uri.scheme() != QString("drachmacoin"))
         return false;
 
     SendCoinsRecipient rv;
-    rv.address = uri.path();
+
+    // WTF Qt?
+    const int addrlen = 34;
+    QString address = uri.path().left(addrlen);
+    rv.address = address;
     rv.amount = 0;
 
 #if QT_VERSION < 0x050000
     QList<QPair<QString, QString> > items = uri.queryItems();
 #else
-    QUrlQuery uriQuery(uri);
-    QList<QPair<QString, QString> > items = uriQuery.queryItems();
+    // Apparently Qt 5 is broken a *lot*
+//    QUrlQuery uriQuery(uri);
+//    QList<QPair<QString, QString> > items = uriQuery.queryItems();
+    QString uriString = uri.path();
+    QList<QPair<QString, QString> > items = queryItems(uriString.right(uriString.size() - addrlen - 1));
 #endif
     for (QList<QPair<QString, QString> >::iterator i = items.begin(); i != items.end(); i++)
     {
@@ -135,13 +163,13 @@ bool parseBitcoinURI(const QUrl &uri, SendCoinsRecipient *out)
 
 bool parseBitcoinURI(QString uri, SendCoinsRecipient *out)
 {
-    // Convert drachmacoin:// to drachmacoin:
+    // Convert bitcoin:// to bitcoin:
     //
-    //    Cannot handle this later, because drachmacoin:// will cause Qt to see the part after // as host,
+    //    Cannot handle this later, because bitcoin:// will cause Qt to see the part after // as host,
     //    which will lower-case it (and thus invalidate the address).
     if(uri.startsWith("drachmacoin://"))
     {
-        uri.replace(0, 10, "drachmacoin:");
+        uri.replace(0, 11, "drachmacoin:");
     }
     QUrl uriInstance(uri);
     return parseBitcoinURI(uriInstance, out);
@@ -179,6 +207,12 @@ void copyEntryData(QAbstractItemView *view, int column, int role)
         // Copy first item (global mouse selection for e.g. X11 - NOP on Windows)
         QApplication::clipboard()->setText(selection.at(0).data(role).toString(), QClipboard::Selection);
     }
+}
+
+void setClipboard(const QString& str)
+{
+    QApplication::clipboard()->setText(str, QClipboard::Clipboard);
+    QApplication::clipboard()->setText(str, QClipboard::Selection);
 }
 
 QString getSaveFileName(QWidget *parent, const QString &caption,
@@ -300,7 +334,7 @@ boost::filesystem::path static StartupShortcutPath()
 
 bool GetStartOnSystemStartup()
 {
-    // check for DRACHMacoin.lnk
+    // check for Bitcoin.lnk
     return boost::filesystem::exists(StartupShortcutPath());
 }
 
@@ -415,7 +449,7 @@ bool SetStartOnSystemStartup(bool fAutoStart)
         boost::filesystem::ofstream optionFile(GetAutostartFilePath(), std::ios_base::out|std::ios_base::trunc);
         if (!optionFile.good())
             return false;
-        // Write a drachmacoin.desktop file to the autostart directory:
+        // Write a bitcoin.desktop file to the autostart directory:
         optionFile << "[Desktop Entry]\n";
         optionFile << "Type=Application\n";
         optionFile << "Name=DRACHMacoin\n";
@@ -427,7 +461,6 @@ bool SetStartOnSystemStartup(bool fAutoStart)
     return true;
 }
 
-
 #elif defined(Q_OS_MAC)
 // based on: https://github.com/Mozketo/LaunchAtLoginController/blob/master/LaunchAtLoginController.m
 
@@ -437,7 +470,7 @@ bool SetStartOnSystemStartup(bool fAutoStart)
 LSSharedFileListItemRef findStartupItemInList(LSSharedFileListRef list, CFURLRef findUrl);
 LSSharedFileListItemRef findStartupItemInList(LSSharedFileListRef list, CFURLRef findUrl)
 {
-    // loop through the list of startup items and try to find the drachmacoin app
+    // loop through the list of startup items and try to find the bitcoin app
     CFArrayRef listSnapshot = LSSharedFileListCopySnapshot(list, NULL);
     for(int i = 0; i < CFArrayGetCount(listSnapshot); i++) {
         LSSharedFileListItemRef item = (LSSharedFileListItemRef)CFArrayGetValueAtIndex(listSnapshot, i);
@@ -471,7 +504,7 @@ bool SetStartOnSystemStartup(bool fAutoStart)
     LSSharedFileListItemRef foundItem = findStartupItemInList(loginItems, bitcoinAppUrl);
 
     if(fAutoStart && !foundItem) {
-        // add drachmacoin app to startup item list
+        // add bitcoin app to startup item list
         LSSharedFileListInsertItemURL(loginItems, kLSSharedFileListItemBeforeFirst, NULL, NULL, bitcoinAppUrl, NULL, NULL);
     }
     else if(!fAutoStart && foundItem) {
@@ -500,8 +533,7 @@ HelpMessageBox::HelpMessageBox(QWidget *parent) :
     uiOptions = tr("UI options") + ":\n" +
         "  -lang=<lang>           " + tr("Set language, for example \"de_DE\" (default: system locale)") + "\n" +
         "  -min                   " + tr("Start minimized") + "\n" +
-        "  -splash                " + tr("Show splash screen on startup (default: 1)") + "\n" +
-        "  -choosedatadir         " + tr("Choose data directory on startup (default: 0)") + "\n";
+        "  -splash                " + tr("Show splash screen on startup (default: 1)") + "\n";
 
     setWindowTitle(tr("DRACHMacoin-Qt"));
     setTextFormat(Qt::PlainText);
