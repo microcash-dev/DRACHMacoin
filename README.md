@@ -1,4 +1,5 @@
-Working on a new COOL Wallet Design. Working for Linux Now...
+Working on a new COOL Wallet Design. Working for Linux Now...Working for Windows now
+Add Graphics and MNGs to your wallet....
 ===================================
 
 DRACHMacoin (DRAC)
