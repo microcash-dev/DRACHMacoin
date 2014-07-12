@@ -55,9 +55,9 @@ QDateTime ClientModel::getLastBlockDate() const
     if (pindexBest)
         return QDateTime::fromTime_t(pindexBest->GetBlockTime());
     else if(!isTestNet())
-        return QDateTime::fromTime_t(1231006505); // Genesis block's time
+        return QDateTime::fromTime_t(1404643635); // Genesis block's time
     else
-        return QDateTime::fromTime_t(1296688602); // Genesis block's time (testnet)
+        return QDateTime::fromTime_t(1392876393); // Genesis block's time (testnet)
 }
 
 double ClientModel::getVerificationProgress() const
@@ -110,7 +110,10 @@ void ClientModel::updateAlert(const QString &hash, int status)
 
 bool ClientModel::isTestNet() const
 {
-    return TestNet;
+    bool fTestNet;
+    fTestNet = TestNet();
+
+    return fTestNet;
 }
 
 bool ClientModel::inInitialBlockDownload() const
